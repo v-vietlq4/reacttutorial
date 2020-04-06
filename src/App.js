@@ -1,7 +1,7 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Person from "./Person/Person";
+import Radium, { StyleRoot } from 'radium';
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ class App extends React.Component {
     });
   }
 
-  deletePersonHanler = (personIndex) => {
+  deletePersonHandler = (personIndex) => {
     //const persons = this.state.persons.slice();
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1)
@@ -46,11 +46,16 @@ class App extends React.Component {
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
     let persons = null;
@@ -68,29 +73,33 @@ class App extends React.Component {
           })}
         </div>
       );
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'salmon',
+        color: 'black'
+      }
     }
+    const classes = [];
+    if (this.state.persons.length <= 2) classes.push('red');
+    if (this.state.persons.length <= 1) classes.push('bold');
+
 
     return (
-      <div className="App" >
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <button
-            style={style}
-            onClick={this.togglePersonsHandler}> Toggle Name</button>
-          {persons}
-        </header>
-      </div>
+      <StyleRoot>
+        <div className="App" >
+          <header className="App-header">
+            <p className={classes.join(' ')}>this is really working!!!</p>
+            <button
+              style={style}
+              onClick={this.togglePersonsHandler}> Toggle Name
+          </button>
+            {persons}
+          </header>
+        </div>
+      </StyleRoot>
     );
   }
 
 };
 
-export default App;
+export default Radium(App);
